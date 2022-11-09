@@ -3,6 +3,7 @@ package com.spring.ecommerce.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,7 +28,22 @@ public class Product {
 
     @OneToMany(mappedBy="product")
     List<CartItem> cartItems;
+
+    @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<OrderItem> orderItemList;
+
+    //Un produs poate sa faca parte din mai multe wishlisturi (deci one-to-many intre product si wishlistitem)
+//    @OneToMany(mappedBy="product")
+//    List<WishlistItem>wishlistItemList;
     public Product(){}
+
+//    public List<WishlistItem> getWishlistItemList() {
+//        return wishlistItemList;
+//    }
+//
+//    public void setWishlistItemList(List<WishlistItem> wishlistItemList) {
+//        this.wishlistItemList = wishlistItemList;
+//    }
 
     public Long getId() {
         return id;
@@ -75,5 +91,16 @@ public class Product {
 
     public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
+    }
+
+    public List<OrderItem> getOrderItemList() {
+        if (this.orderItemList == null){
+            this.orderItemList = new ArrayList<>();
+        }
+        return orderItemList;
+    }
+
+    public void setOrderItemList(List<OrderItem> orderItemList) {
+        this.orderItemList = orderItemList;
     }
 }

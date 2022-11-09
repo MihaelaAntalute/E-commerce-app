@@ -13,11 +13,18 @@ public class User {
     @Column
     private String name;
 
-    public User (){}
+    public User() {
+    }
 
+    @OneToMany(mappedBy = "user",cascade= CascadeType.ALL)
+    private List<Order> orders;
 
-    @OneToMany(mappedBy="user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     List<CartItem> cartItems;
+//Un user are un wishlist (deci one-to-one intre user si wishlist)
+
+//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+//    private Wishlist wishlists;
 
     public Long getId() {
         return id;

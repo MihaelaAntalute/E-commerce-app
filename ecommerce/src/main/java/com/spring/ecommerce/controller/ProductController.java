@@ -1,6 +1,7 @@
 package com.spring.ecommerce.controller;
 
 import com.spring.ecommerce.dto.AddProductDTO;
+import com.spring.ecommerce.model.Category;
 import com.spring.ecommerce.model.Product;
 import com.spring.ecommerce.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,13 @@ public class ProductController {
     public List<Product> getAllProductsByCategory(@PathVariable Long categoryId){
         return productService.getAllProductsByCategory(categoryId);
     }
+    @PutMapping("/update/{productId}")
+    public Product updateProduct(@RequestBody Product product, @PathVariable Long productId){
+        return productService.updateProduct(product,productId);
+    }
+   // @DeleteMapping("/delete")
+   // public void
+
 
 
 }
