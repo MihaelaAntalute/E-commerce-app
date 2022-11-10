@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class OrderService {
     private OrderRepository orderRepository;
     private UserRepository userRepository;
@@ -27,7 +28,8 @@ public class OrderService {
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
     }
-@Transactional
+
+    //metoda de tip tranzactie
     public Order placeOrder(Long userId) {
         //1.1cautam utilizatorul dupa id
         //1.2luam toate cartItem-urile de la utilizator
@@ -49,7 +51,21 @@ public class OrderService {
             newOrder.getOrderItemList().add(orderItem);
         }
         Order savedOrder = orderRepository.save(newOrder);
-        cartItemService.deleteAllUserCartItems(foundUser);
+        cartItemService.deleteAllUserCartItems(userId);
+        //cartItemService.deleteAllByUserId(userId);
         return savedOrder;
     }
+
+    public List<Order> getAllOrdersByUser(Long userId) {
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
+        return orderRepository.findAllByUserOrderByCreatedDateDesc(foundUser);
+    }
+
+    public Order getOrderDetails(Long orderId) {
+        Order foundOrder = orderRepository.findById(orderId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "order not found"));
+        return foundOrder;
+    }
+
+
+
 }

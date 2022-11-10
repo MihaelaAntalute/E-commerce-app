@@ -1,29 +1,28 @@
 package com.spring.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 @Entity
-public class OrderItem {
-
+public class WishlistItem {
     @Id
     @GeneratedValue
     private Long id;
 
-    private Integer quantity;
 
     @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @JsonBackReference
+    @JoinColumn(name="wishlist_id")
+    private Wishlist wishlist;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JsonBackReference
+    @JoinColumn(name="product_id")
     private Product product;
 
-    public OrderItem() {
-    }
+    public WishlistItem(){}
 
     public Long getId() {
         return id;
@@ -33,20 +32,13 @@ public class OrderItem {
         this.id = id;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+
+    public Wishlist getWishlist() {
+        return wishlist;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setWishlist(Wishlist wishlist) {
+        this.wishlist = wishlist;
     }
 
     public Product getProduct() {
@@ -56,4 +48,5 @@ public class OrderItem {
     public void setProduct(Product product) {
         this.product = product;
     }
+
 }

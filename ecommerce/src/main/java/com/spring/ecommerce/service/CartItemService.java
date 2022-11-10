@@ -3,6 +3,7 @@ package com.spring.ecommerce.service;
 import com.spring.ecommerce.dto.AddToCartDTO;
 import com.spring.ecommerce.dto.UserCartDTO;
 import com.spring.ecommerce.model.CartItem;
+import com.spring.ecommerce.model.Order;
 import com.spring.ecommerce.model.Product;
 import com.spring.ecommerce.model.User;
 import com.spring.ecommerce.repository.CartItemRepository;
@@ -11,12 +12,14 @@ import com.spring.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class CartItemService {
 
     private ProductRepository productRepository;
@@ -62,8 +65,15 @@ public class CartItemService {
         cartItemRepository.delete(cartItem);
     }
 
-    public void deleteAllUserCartItems(User user){
-        cartItemRepository.deleteAllByUser(user);
+    public void deleteAllUserCartItems(Long userId){
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
+
+        cartItemRepository.deleteByUser(foundUser);
     }
+
+//    public void deleteAllByUserId(Long userId){
+//        cartItemRepository.findAllByUser_Id(userId);
+//    }
+
 
 }

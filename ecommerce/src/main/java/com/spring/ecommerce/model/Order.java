@@ -1,5 +1,7 @@
 package com.spring.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +19,7 @@ public class Order {
     private Double totalPrice;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name ="user_id")
     private User user;
 

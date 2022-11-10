@@ -1,5 +1,7 @@
 package com.spring.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -23,8 +25,9 @@ public class User {
     List<CartItem> cartItems;
 //Un user are un wishlist (deci one-to-one intre user si wishlist)
 
-//    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-//    private Wishlist wishlists;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonBackReference
+    private Wishlist wishlist;
 
     public Long getId() {
         return id;
@@ -48,5 +51,24 @@ public class User {
 
     public void setCartItems(List<CartItem> cartItems) {
         this.cartItems = cartItems;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Wishlist getWishlist() {
+        if (this.wishlist == null) {
+            wishlist = new Wishlist();
+        }
+        return wishlist;
+    }
+
+    public void setWishlist(Wishlist wishlist) {
+        this.wishlist = wishlist;
     }
 }

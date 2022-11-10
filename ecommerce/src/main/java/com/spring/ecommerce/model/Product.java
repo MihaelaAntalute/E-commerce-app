@@ -1,6 +1,7 @@
 package com.spring.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -33,17 +34,18 @@ public class Product {
     private List<OrderItem> orderItemList;
 
     //Un produs poate sa faca parte din mai multe wishlisturi (deci one-to-many intre product si wishlistitem)
-//    @OneToMany(mappedBy="product")
-//    List<WishlistItem>wishlistItemList;
+    @OneToMany(mappedBy="product")
+            @JsonManagedReference
+    List<WishlistItem> wishlistItemList;
     public Product(){}
 
-//    public List<WishlistItem> getWishlistItemList() {
-//        return wishlistItemList;
-//    }
-//
-//    public void setWishlistItemList(List<WishlistItem> wishlistItemList) {
-//        this.wishlistItemList = wishlistItemList;
-//    }
+    public List<WishlistItem> getWishlistItemList() {
+        return wishlistItemList;
+    }
+
+    public void setWishlistItemList(List<WishlistItem> wishlistItemList) {
+        this.wishlistItemList = wishlistItemList;
+    }
 
     public Long getId() {
         return id;

@@ -8,12 +8,14 @@ import com.spring.ecommerce.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 
 @Service
+@Transactional
 public class ProductService {
 
     private ProductRepository productRepository;
@@ -25,6 +27,8 @@ public class ProductService {
         this.categoryRepository = categoryRepository;
     }
 
+
+
     public Product addProduct(AddProductDTO productDTO, Long categoryId) {
         Product productToBeSaved = new Product();
         Category foundedCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the order you want to update was not found"));
@@ -34,6 +38,7 @@ public class ProductService {
         productToBeSaved.setPrice(productDTO.getPrice());
         return productRepository.save(productToBeSaved);
     }
+
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();

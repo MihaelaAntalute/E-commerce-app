@@ -33,5 +33,10 @@ public class CartItemController {
         cartItemService.deleteCartItem(cartItemId);
     }
 
+    @DeleteMapping("/delete/user/{userId}")
+    public void deleteUserCartItems(@PathVariable Long userId){
+        cartItemService.deleteAllUserCartItems(userId);
+    }
+
 
 }
