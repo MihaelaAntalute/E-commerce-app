@@ -1,7 +1,7 @@
 package com.spring.ecommerce.service;
 //
 
-import com.spring.ecommerce.dto.AddToWishlistDTO;
+import com.spring.ecommerce.dto.AddAndDeleteToWishlistDTO;
 import com.spring.ecommerce.model.Product;
 import com.spring.ecommerce.model.User;
 import com.spring.ecommerce.model.Wishlist;
@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.List;
 
 @Service
 public class WishlistItemService {
@@ -32,9 +34,9 @@ public class WishlistItemService {
         this.wishlistRepository = wishlistRepository;
     }
 
-    public Wishlist addItemToWishlist(AddToWishlistDTO addToWishlistDTO) {
-        Product foundProduct = productRepository.findById(addToWishlistDTO.getProductId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "product not found"));
-        User foundUser = userRepository.findById(addToWishlistDTO.getUserId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
+    public Wishlist addItemToWishlist(AddAndDeleteToWishlistDTO addAndDeleteToWishlistDTO) {
+        Product foundProduct = productRepository.findById(addAndDeleteToWishlistDTO.getProductId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "product not found"));
+        User foundUser = userRepository.findById(addAndDeleteToWishlistDTO.getUserId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
         Wishlist foundWishlist = foundUser.getWishlist();
         foundWishlist.setUser(foundUser);
         WishlistItem wishlistItem = new WishlistItem();
@@ -44,18 +46,23 @@ public class WishlistItemService {
         return wishlistRepository.save(foundWishlist);
     }
 
-//    public List<Product> getAllProductsByUser(Long userId) {
-//        User foundUser = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
-//        return productRepository.findAllProductsByUser(foundUser);
-//    }
+    public List<WishlistItem> getAllWishlistItems(Long userId) {
+        User foundUser = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
+        return wishlistItemRepository.findWishlistItemByWishlist_User(foundUser);
+    }
 
-//    public void deleteProductFromWishlist(AddToWishlistDTO addToWishlistDTO){
-//        Product foundedProduct = productRepository.findById(addToWishlistDTO.getProductId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "product not found"));
-//        User foundUser = userRepository.findById(addToWishlistDTO.getUserId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
-//        WishlistItem wishlistItem = new WishlistItem();
-//        wishlistItem.setProduct(foundedProduct);
-//        wishlistItem.setUser(foundUser);
-//        wishlistItemRepository.delete(wishlistItem);
+    public void deleteWishListItemFromWishlistOfUser(AddAndDeleteToWishlistDTO addAndDeleteToWishlistDTO) {
+        Product foundedProduct = productRepository.findById(addAndDeleteToWishlistDTO.getProductId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "product not found"));
+        User foundUser = userRepository.findById(addAndDeleteToWishlistDTO.getUserId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
+        WishlistItem wishlistItemToDelete = wishlistItemRepository.findWishlistItemByWishlist_UserAndProduct(foundUser, foundedProduct); //orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "wishlistItem not found"));
+        wishlistItemRepository.delete(wishlistItemToDelete);
+        foundUser.getWishlist().getWishlistItems().remove(wishlistItemToDelete);
+        wishlistRepository.save(foundUser.getWishlist());
+    }
+
+//    public Integer getHowManyUsersHaveTheProductInWishlist(Long productId) {
+//        Product foundedProduct = productRepository.findById(productId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "product not found"));
+//        return wishlistItemRepository.findWishlistItemByWishlistIsContainingAndProduct_Id(foundedProduct);
 //    }
 
 }

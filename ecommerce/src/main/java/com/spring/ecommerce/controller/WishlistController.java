@@ -1,10 +1,10 @@
 package com.spring.ecommerce.controller;
 
-import com.spring.ecommerce.dto.AddToWishlistDTO;
+import com.spring.ecommerce.dto.AddAndDeleteToWishlistDTO;
 import com.spring.ecommerce.model.Product;
 import com.spring.ecommerce.model.Wishlist;
-import com.spring.ecommerce.model.WishlistItem;
 
+import com.spring.ecommerce.model.WishlistItem;
 import com.spring.ecommerce.service.WishlistItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +23,8 @@ public class WishlistController {
     }
 
     @PostMapping("/add")
-    public Wishlist addToWishlist(@RequestBody AddToWishlistDTO addToWishlistDTO) {
-        return wishlistItemService.addItemToWishlist(addToWishlistDTO);
+    public Wishlist addToWishlist(@RequestBody AddAndDeleteToWishlistDTO addAndDeleteToWishlistDTO) {
+        return wishlistItemService.addItemToWishlist(addAndDeleteToWishlistDTO);
     }
 
 
@@ -33,9 +33,22 @@ public class WishlistController {
 //        return wishlistItemService.getAllProductsByUser(userId);
 //    }
 
-//    @DeleteMapping("/delete")
-//    public void deleteProductFromWishlist(@RequestBody AddToWishlistDTO addToWishlistDTO){
-//        wishlistItemService.deleteProductFromWishlist(addToWishlistDTO);
+    // Vedem produsele din wishlist-ul unui utilizator
+    //Endpoint: /wishlist/{usedId}
+    @GetMapping("/{userId}")
+    public List<WishlistItem> getAllWishlistItem(@PathVariable Long userId) {
+        return wishlistItemService.getAllWishlistItems(userId);
+    }
+
+    @DeleteMapping("/delete")
+    public void deleteProductFromWishlist(@RequestBody AddAndDeleteToWishlistDTO addAndDeleteToWishlistDTO) {
+        wishlistItemService.deleteWishListItemFromWishlistOfUser(addAndDeleteToWishlistDTO);
+    }
+
+//    @GetMapping("/how users/{productId}")
+//    public Integer getHowManyUsersHaveTheProductInWishlist(@PathVariable Long productId) {
+//        return wishlistItemService.getHowManyUsersHaveTheProductInWishlist(productId);
 //    }
+
 
 }

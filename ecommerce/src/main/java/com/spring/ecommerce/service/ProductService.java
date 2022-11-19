@@ -28,11 +28,10 @@ public class ProductService {
     }
 
 
-
     public Product addProduct(AddProductDTO productDTO, Long categoryId) {
         Product productToBeSaved = new Product();
-        Category foundedCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the order you want to update was not found"));
-        productToBeSaved.setCategory(foundedCategory);
+        Category foundCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the order you want to update was not found"));
+        productToBeSaved.setCategory(foundCategory);
         productToBeSaved.setDescription(productDTO.getDescription());
         productToBeSaved.setName(productDTO.getName());
         productToBeSaved.setPrice(productDTO.getPrice());
@@ -49,15 +48,21 @@ public class ProductService {
         return productRepository.findAllByCategory(foundedCategory);
     }
 
-    public Product updateProduct(Product product, Long productId) {
-        Product foundedProduct = productRepository.findById(productId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the product you want to update was not found"));
-        foundedProduct.setName(product.getName());
-        foundedProduct.setDescription(product.getDescription());
-        foundedProduct.setPrice(product.getPrice());
-        foundedProduct.setCategory(product.getCategory());
+    public Product updateProduct(AddProductDTO  addProductDTO, Long productId) {
+        Product foundedProduct = productRepository.findById(productId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the product was not found"));
+        Category foundCategory = categoryRepository.findById(addProductDTO.getCategoryId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"the category was not found"));
+        foundedProduct.setName(addProductDTO.getName());
+        foundedProduct.setDescription(addProductDTO.getDescription());
+        foundedProduct.setPrice(addProductDTO.getPrice());
+        foundedProduct.setCategory(foundCategory);
         return productRepository.save(foundedProduct);
     }
 
+
+    public void deleteProduct( Long productId) {
+        Product foundedProduct = productRepository.findById(productId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the product you want to update was not found"));
+        productRepository.delete(foundedProduct);
+    }
 
 
 }

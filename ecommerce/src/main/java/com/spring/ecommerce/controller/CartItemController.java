@@ -28,6 +28,10 @@ public class CartItemController {
     public UserCartDTO viewCart(@PathVariable Long userId){
         return cartItemService.viewCart(userId);
     }
+    @PutMapping("/update/{cartItemId}")
+    public CartItem updateCartItem( @RequestBody AddToCartDTO addToCartDTO,@PathVariable Long cartItemId){
+        return cartItemService.updateCartItem(addToCartDTO,cartItemId);
+    }
     @DeleteMapping("/delete/{cartItemId}")
     public void deleteCartItem(@PathVariable Long cartItemId){
         cartItemService.deleteCartItem(cartItemId);
@@ -37,6 +41,7 @@ public class CartItemController {
     public void deleteUserCartItems(@PathVariable Long userId){
         cartItemService.deleteAllUserCartItems(userId);
     }
+
 
 
 }

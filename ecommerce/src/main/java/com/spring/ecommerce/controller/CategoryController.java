@@ -23,15 +23,19 @@ public class CategoryController {
     }
 
     @GetMapping("/")
-    public List<Category> getCategories(){
-      return  categoryService.getCategories();
+    public List<Category> getCategories() {
+        return categoryService.getCategories();
     }
 
     @PutMapping("/update/{categoryId}")
-    public Category updateCategory(@RequestBody Category category,@PathVariable Long categoryId){
-        return categoryService.updateCategory(category,categoryId);
+    public Category updateCategory(@RequestBody Category category, @PathVariable Long categoryId) {
+        return categoryService.updateCategory(category, categoryId);
     }
 
+    @DeleteMapping("/delete/{categoryId}")
+    public void deleteCategory(@PathVariable Long categoryId) {
+        categoryService.deleteCategory(categoryId);
+    }
 
 
 }

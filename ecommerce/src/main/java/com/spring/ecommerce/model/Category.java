@@ -1,6 +1,9 @@
 package com.spring.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,7 +18,8 @@ public class Category {
     @Column
     private String description;
 
-    @OneToMany(mappedBy = "category",cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "category",cascade=CascadeType.ALL,orphanRemoval = true)
+            @JsonManagedReference("category")
     List<Product>productList;
     public Category(){}
 
@@ -44,6 +48,9 @@ public class Category {
     }
 
     public List<Product> getProductList() {
+        if(this.productList == null){
+            productList = new ArrayList<>();
+        }
         return productList;
     }
 

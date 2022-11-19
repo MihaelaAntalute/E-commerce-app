@@ -30,11 +30,17 @@ public class CategoryService {
     public List<Category> getCategories() {
         return categoryRepository.findAll();
     }
-    public Category updateCategory(Category category,Long categoryId){
-        Category foundedCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"the order you want to update was not found"));
+
+    public Category updateCategory(Category category, Long categoryId) {
+        Category foundedCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the order you want to update was not found"));
         foundedCategory.setDescription(category.getDescription());
         foundedCategory.setName(category.getName());
         return categoryRepository.save(foundedCategory);
+    }
+
+    public void deleteCategory(Long categoryId) {
+        Category foundedCategory = categoryRepository.findById(categoryId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the order you want to update was not found"));
+        categoryRepository.deleteCategoryById(foundedCategory);
     }
 
 }

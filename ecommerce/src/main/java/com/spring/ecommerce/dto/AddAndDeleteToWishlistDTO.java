@@ -1,15 +1,14 @@
 package com.spring.ecommerce.dto;
 
-public class AddToCartDTO {
-
+public class AddAndDeleteToWishlistDTO {
     private Long productId;
     private Long userId;
-    private Integer quantity;
 
-    public AddToCartDTO(Long productId, Long userId, Integer quantity) {
+
+    public AddAndDeleteToWishlistDTO(Long productId, Long userId) {
         this.productId = productId;
         this.userId = userId;
-        this.quantity = quantity;
+
     }
 
     public Long getProductId() {
@@ -28,12 +27,6 @@ public class AddToCartDTO {
         this.userId = userId;
     }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
 
 }

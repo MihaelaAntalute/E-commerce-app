@@ -60,20 +60,25 @@ public class CartItemService {
         return totalPrice.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "total price could not be calculated"));
     }
 
+    public CartItem updateCartItem(AddToCartDTO addToCartDTO, Long cartItemId) {
+        CartItem foundCartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the cart item you want to update does not exist"));
+        Product foundProduct = productRepository.findById(addToCartDTO.getProductId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "product not found"));
+        User foundUser = userRepository.findById(addToCartDTO.getUserId()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
+        foundCartItem.setQuantity(addToCartDTO.getQuantity());
+        foundCartItem.setProduct(foundProduct);
+        foundCartItem.setUser(foundUser);
+        return cartItemRepository.save(foundCartItem);
+    }
+
     public void deleteCartItem(Long cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "the cart item you want to delete does not exist"));
         cartItemRepository.delete(cartItem);
     }
 
-    public void deleteAllUserCartItems(Long userId){
+    public void deleteAllUserCartItems(Long userId) {
         User foundUser = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
-
         cartItemRepository.deleteByUser(foundUser);
     }
-
-//    public void deleteAllByUserId(Long userId){
-//        cartItemRepository.findAllByUser_Id(userId);
-//    }
 
 
 }

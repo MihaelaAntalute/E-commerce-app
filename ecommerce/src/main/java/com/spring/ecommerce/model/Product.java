@@ -1,5 +1,6 @@
 package com.spring.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -22,22 +23,24 @@ public class Product {
     private Double price;
 
     @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name="category_id")
+    @JsonBackReference("productList")
+    @JoinColumn(name = "category_id")
     private Category category;
 
 
-    @OneToMany(mappedBy="product")
+    @OneToMany(mappedBy = "product")
     List<CartItem> cartItems;
 
     @OneToMany(mappedBy = "order", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<OrderItem> orderItemList;
 
     //Un produs poate sa faca parte din mai multe wishlisturi (deci one-to-many intre product si wishlistitem)
-    @OneToMany(mappedBy="product")
-            @JsonManagedReference
+    @OneToMany(mappedBy = "product")
+    @JsonManagedReference
     List<WishlistItem> wishlistItemList;
-    public Product(){}
+
+    public Product() {
+    }
 
     public List<WishlistItem> getWishlistItemList() {
         return wishlistItemList;
@@ -96,7 +99,7 @@ public class Product {
     }
 
     public List<OrderItem> getOrderItemList() {
-        if (this.orderItemList == null){
+        if (this.orderItemList == null) {
             this.orderItemList = new ArrayList<>();
         }
         return orderItemList;

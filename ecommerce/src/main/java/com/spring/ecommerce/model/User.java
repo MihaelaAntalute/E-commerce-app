@@ -13,7 +13,11 @@ public class User {
     private Long id;
 
     @Column
-    private String name;
+    private String username;
+
+
+    @Column
+    private String password;
 
     public User() {
     }
@@ -29,6 +33,14 @@ public class User {
     @JsonBackReference
     private Wishlist wishlist;
 
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roleList;
+
     public Long getId() {
         return id;
     }
@@ -37,12 +49,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     public List<CartItem> getCartItems() {
@@ -68,7 +80,23 @@ public class User {
         return wishlist;
     }
 
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
+    }
+
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
     public void setWishlist(Wishlist wishlist) {
         this.wishlist = wishlist;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

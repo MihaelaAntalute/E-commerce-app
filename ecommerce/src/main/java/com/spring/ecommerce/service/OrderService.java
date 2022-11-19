@@ -4,6 +4,7 @@ import com.spring.ecommerce.model.CartItem;
 import com.spring.ecommerce.model.Order;
 import com.spring.ecommerce.model.OrderItem;
 import com.spring.ecommerce.model.User;
+import com.spring.ecommerce.repository.CartItemRepository;
 import com.spring.ecommerce.repository.OrderRepository;
 import com.spring.ecommerce.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class OrderService {
     private OrderRepository orderRepository;
     private UserRepository userRepository;
     private CartItemService cartItemService;
+    @Autowired
+    private CartItemRepository cartItemRepository;
 
     @Autowired
     public OrderService(OrderRepository orderRepository, UserRepository userRepository, CartItemService cartItemService) {
@@ -38,7 +41,7 @@ public class OrderService {
         //5. salvam order-ul in baza de date
         //6. stergem toate cart-itemurile utilizatorului din baza de date
         User foundUser = userRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found"));
-        List<CartItem> userCartItems = foundUser.getCartItems();
+        List<CartItem> userCartItems = cartItemRepository.findAllByUser(foundUser);
         Order newOrder = new Order();
         newOrder.setCreatedDate(new Date());
         newOrder.setUser(foundUser);
@@ -51,6 +54,8 @@ public class OrderService {
             newOrder.getOrderItemList().add(orderItem);
         }
         Order savedOrder = orderRepository.save(newOrder);
+        List<CartItem>userCartItem2=cartItemRepository.findAllByUser(foundUser);
+        userCartItem2.forEach(uci->cartItemRepository.delete(uci));
         cartItemService.deleteAllUserCartItems(userId);
         //cartItemService.deleteAllByUserId(userId);
         return savedOrder;

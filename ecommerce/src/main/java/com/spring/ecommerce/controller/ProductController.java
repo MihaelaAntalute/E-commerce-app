@@ -20,26 +20,30 @@ public class ProductController {
 
 
     @PostMapping("/create")
-    public Product addProduct(@RequestBody AddProductDTO productDTO){
+    public Product addProduct(@RequestBody AddProductDTO productDTO) {
         Long categoryId = productDTO.getCategoryId();
         return productService.addProduct(productDTO, categoryId);
     }
 
     @GetMapping("/")
-    public List<Product> getAllProducts(){
-       return productService.getAllProducts();
+    public List<Product> getAllProducts() {
+        return productService.getAllProducts();
     }
 
     @GetMapping("/{categoryId}")
-    public List<Product> getAllProductsByCategory(@PathVariable Long categoryId){
+    public List<Product> getAllProductsByCategory(@PathVariable Long categoryId) {
         return productService.getAllProductsByCategory(categoryId);
     }
+
     @PutMapping("/update/{productId}")
-    public Product updateProduct(@RequestBody Product product, @PathVariable Long productId){
-        return productService.updateProduct(product,productId);
+    public Product updateProduct(@RequestBody AddProductDTO addProductDTO, @PathVariable Long productId) {
+        return productService.updateProduct(addProductDTO, productId);
     }
-   // @DeleteMapping("/delete")
-   // public void
+
+    @DeleteMapping("/delete/{productId}")
+    public void deleteProductFromCategory(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+    }
 
 
 

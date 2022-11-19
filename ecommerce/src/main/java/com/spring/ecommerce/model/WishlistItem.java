@@ -34,6 +34,9 @@ public class WishlistItem {
 
 
     public Wishlist getWishlist() {
+        if(this.wishlist == null){
+            wishlist = new Wishlist();
+        }
         return wishlist;
     }
 
