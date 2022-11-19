@@ -1,8 +1,11 @@
 package com.spring.ecommerce.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,6 +38,7 @@ public class User {
 
 
     @ManyToMany
+    @JsonIgnoreProperties("userList")
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -85,6 +89,9 @@ public class User {
     }
 
     public List<Role> getRoleList() {
+        if (roleList == null){
+            roleList = new ArrayList<>();
+        }
         return roleList;
     }
 

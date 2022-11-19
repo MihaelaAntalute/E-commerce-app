@@ -1,6 +1,9 @@
 package com.spring.ecommerce.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -14,6 +17,7 @@ public class Role {
     private RoleType roleType;
 
     @ManyToMany(mappedBy = "roleList")
+    @JsonIgnoreProperties("roleList")
     private List<User> userList;
 
     public Role(){}
@@ -35,6 +39,9 @@ public class Role {
     }
 
     public List<User> getUserList() {
+        if (userList == null){
+            userList = new ArrayList<>();
+        }
         return userList;
     }
 
