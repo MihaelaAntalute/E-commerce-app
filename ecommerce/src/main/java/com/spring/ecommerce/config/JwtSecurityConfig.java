@@ -35,7 +35,7 @@ public class JwtSecurityConfig {
     public SecurityFilterChain configure (HttpSecurity http) throws Exception {
         return http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/category/**").permitAll()
+                .antMatchers("/category/**").hasRole("ADMIN")
                 .antMatchers("/authenticate").permitAll()
                 .antMatchers("/register").permitAll()
                 .antMatchers(HttpMethod.POST,"/product/**").hasRole("ADMIN")
